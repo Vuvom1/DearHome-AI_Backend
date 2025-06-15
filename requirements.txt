@@ -1,0 +1,42 @@
+# Web framework
+# fastapi==0.104.1
+# uvicorn==0.23.2
+# websockets==11.0.3  # Version that works with both gradio and uvicorn
+
+# Data validation
+pydantic==2.11.4
+pydantic-settings==2.1.0
+python-multipart==0.0.6
+
+# Environment management
+python-dotenv==1.0.0
+
+# Machine learning
+torch>=2.7.1
+transformers>=4.35.2  # More stable version for deployment
+accelerate>=1.6.0
+bitsandbytes>=0.41.1
+numpy>=1.24.3  # Using stable version for better compatibility
+
+# UI
+gradio==3.50.2  # Compatible with websockets<12.0
+
+# Database - Azure SQL optimized
+pyodbc>=5.2.0
+sqlalchemy>=2.0.40
+tenacity>=8.2.3  # For resilient database connections
+
+# Azure best practices for production
+azure-identity==1.14.0  # For Managed Identity authentication
+azure-keyvault-secrets==4.7.0  # For secure credential management
+azure-monitor-opentelemetry==1.1.0  # For application insights integration
+
+# Optional: Use for API integration alternatives
+langchain==0.1.1  # Alternative for integrating with various LLM APIs
+
+google-genai
+firebase-admin>=6.8.0
+scikit-learn>=1.4.0
+sentence-transformers>=2.5.0
+nats-py
+chromadb
