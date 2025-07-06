@@ -62,16 +62,15 @@ async def generate_shape(shape_data: GenerateShapeRequest):
         # Check if the result is a tuple with the expected structure
         if isinstance(result, tuple) and len(result) >= 3:
             # Extract components
-            glb_info = result[0]
-            html_content = result[1]
-            model_stats = result[2]
-            seed = result[3] if len(result) > 3 else None
+            mesh = result[0]
+            textured_shape = result[1]
+            html_content = result[2] if len(result) > 2 else None
             
             return_html = False 
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
             firebase_result = firebase_service.upload_gltf_file(
-                file_path=glb_info.get('value') if isinstance(glb_info, dict) else glb_info,
+                file_path=textured_shape.get('value') if isinstance(textured_shape, dict) else textured_shape,
                 destination_path=f"Shapes/{timestamp}_{shape_data.caption.replace(' ', '_')}.glb",
                 make_public=True
             )
@@ -81,26 +80,27 @@ async def generate_shape(shape_data: GenerateShapeRequest):
             if firebase_result:
                 split_result = firebase_result.split('/')
                 storage_file_path = split_result[-2] + '/' + split_result[-1]
+                
 
             if not return_html:
               
                 response_data = {
                     "success": True,
                     "shape_id": os.path.basename(shape_data.image_path).split('.')[0] or str(uuid.uuid4()),
-                    "glb_path": glb_info.get('value') if isinstance(glb_info, dict) else None,
+                    "glb_path": textured_shape.get('value') if isinstance(textured_shape, dict) else None,
                     "storage_url": firebase_result if firebase_result else None,
                     "storage_file_path": storage_file_path,
-                    "html_content": html_content,
-                    "model_info": {
-                        "model": model_stats.get('model', {}),
-                        "params": model_stats.get('params', {}),
-                        "statistics": {
-                            "number_of_faces": model_stats.get('number_of_faces'),
-                            "number_of_vertices": model_stats.get('number_of_vertices'),
-                            "generation_time_ms": round(model_stats.get('time', {}).get('total', 0) * 1000) if isinstance(model_stats.get('time'), dict) else None
-                        }
-                    },
-                    "seed": seed
+                    # "html_content": html_content,
+                    # "model_info": {
+                    #     "model": model_stats.get('model', {}),
+                    #     "params": model_stats.get('params', {}),
+                    #     "statistics": {
+                    #         "number_of_faces": model_stats.get('number_of_faces'),
+                    #         "number_of_vertices": model_stats.get('number_of_vertices'),
+                    #         "generation_time_ms": round(model_stats.get('time', {}).get('total', 0) * 1000) if isinstance(model_stats.get('time'), dict) else None
+                    #     }
+                    # },
+                    # "seed": seed
                 }
                 
                 return JSONResponse(content=response_data)
