@@ -19,7 +19,7 @@ bitsandbytes>=0.41.1
 numpy>=1.24.3  # Using stable version for better compatibility
 
 # UI
-gradio==3.50.2  # Compatible with websockets<12.0
+gradio==5.34.2 # Compatible with websockets<12.0
 
 # Database - Azure SQL optimized
 pyodbc>=5.2.0

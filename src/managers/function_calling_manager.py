@@ -125,6 +125,9 @@ class FunctionCallingManager:
             "greeting": [],
             "product_search": ["query"],
             "product_information_inquiry": ["product_name"],
+            "product_dimensions": ["product_name"],
+            "product_material": ["product_name"],
+            "product_color": ["product_name"],
             "interior_design_advice": ["room_type", "style", "constraint", "goal"],
             "color_matching_advice": ["base_elements", "style", "atmosphere"],
             "price_inquiry": ["product_name"],
@@ -192,6 +195,9 @@ Return only valid JSON, no additional text."""
             "greeting": self.greeting,
             "product_search": self.product_search,
             "product_information_inquiry": self.product_information_inquiry,
+            "product_dimensions": self.product_dimensions,
+            "product_material": self.product_material,
+            "product_color": self.product_color, 
             "interior_design_advice": self.interior_design_advice,
             "color_matching_advice": self.color_matching_advice,
             "price_inquiry": self.price_inquiry,
@@ -234,12 +240,54 @@ Return only valid JSON, no additional text."""
         """Hàm tra cứu thông tin sản phẩm."""
         search_results = await self.variant_service.search_variants(
             query=product_name,
-            n_results=1
+            limit=1
         )
         if not search_results:
             return json.dumps({"error": "No information found for the specified product."}, indent=2)
         
         return json.dumps(search_results, indent=2)  
+    
+    async def product_dimensions(self, product_name: str) -> str:
+        """Hàm tra cứu kích thước sản phẩm."""
+        search_results = await self.variant_service.search_variants(
+            query=product_name,
+            limit=1
+        )
+        if not search_results:
+            return json.dumps({"error": "No dimensions found for the specified product."}, indent=2)
+        
+        # Convert search results to JSON format
+        product_info = search_results[0].get('metadata', {})
+        dimensions = product_info.get('dimensions', 'Dimensions not available')
+        return json.dumps({"product_name": product_name, "dimensions": dimensions}, indent=2)
+    
+    async def product_material(self, product_name: str) -> str:
+        """Hàm tra cứu chất liệu sản phẩm."""
+        search_results = await self.variant_service.search_variants(
+            query=product_name,
+            limit=1
+        )
+        if not search_results:
+            return json.dumps({"error": "No material information found for the specified product."}, indent=2)
+        
+        # Convert search results to JSON format
+        product_info = search_results[0].get('metadata', {})
+        material = product_info.get('material', 'Material not available')
+        return json.dumps({"product_name": product_name, "material": material}, indent=2)
+    
+    async def product_color(self, product_name: str) -> str:
+        """Hàm tra cứu màu sắc sản phẩm."""
+        search_results = await self.variant_service.search_variants(
+            query=product_name,
+            limit=1
+        )
+        if not search_results:
+            return json.dumps({"error": "No color information found for the specified product."}, indent=2)
+        
+        # Convert search results to JSON format
+        product_info = search_results[0].get('metadata', {})
+        color = product_info.get('color', 'Color not available')
+        return json.dumps({"product_name": product_name, "color": color}, indent=2)
 
     async def interior_design_advice(self, room_type: str, style: str, constraint: str, goal: str) -> str:
         """Hàm tư vấn thiết kế nội thất."""
@@ -286,7 +334,6 @@ Return only valid JSON, no additional text."""
 
     async def order_status(self, user_id: str = "", status: str = "", total_price: float = 0.0, discount: float = 0.0, final_price: float = 0.0, order_date: str = "", shipping_address: str = "", order_details: list = None) -> str:
         query = " ".join(filter(None, [
-            user_id,
             status,
             str(total_price) if total_price else "",
             str(discount) if discount else "",
@@ -296,7 +343,7 @@ Return only valid JSON, no additional text."""
             " ".join(order_details) if order_details else ""
         ]))
 
-        orders = await order_service.search_orders(query=query, limit=5)
+        orders = await order_service.search_orders(query=query, user_id=user_id, limit=5)
         if not orders:
             return json.dumps({"error": "No orders found."}, indent=2)
 

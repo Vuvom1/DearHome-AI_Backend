@@ -113,8 +113,8 @@ class OrderService:
         except Exception as e:
             logger.error(f"Error retrieving order: {str(e)}")
             return None
-        
-    async def search_orders(self, query: str, limit: int = 10) -> List[Dict[str, Any]]:
+
+    async def search_orders(self, user_id: str, query: str, limit: int = 10) -> List[Dict[str, Any]]:
         """
         Search for orders using a query string.
         
@@ -126,7 +126,11 @@ class OrderService:
             List[Dict[str, Any]]: List of matching orders
         """
         try:
-            results = await self.chroma_service.search_items(query=query, n_results=limit)
+            results = await self.chroma_service.search_filter_items(
+                query=query,
+                n_results=limit,
+                filters={'user_id': user_id}
+            )
             return results if results else []
         except Exception as e:
             logger.error(f"Error searching orders: {str(e)}")

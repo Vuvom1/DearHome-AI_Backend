@@ -170,6 +170,53 @@ class ChromaService:
         except Exception as e:
             logger.error(f"Error searching items: {str(e)}")
             raise ChromaQueryError(f"Error performing search: {str(e)}")
+
+    @retry_on_error()
+    async def search_filter_items(
+        self,
+        query: str,
+        n_results: int = 5,
+        filters: Optional[Dict[str, Any]] = None
+    ) -> List[Dict[str, Any]]:
+        """Search for items with optional filters"""
+        try:
+            # Generate embedding for query
+            query_embedding = self._generate_embedding(query)
+            
+            # Use collection directly since ChromaDB operations are synchronous
+            results = self.collection.query(
+                query_embeddings=[query_embedding],
+                n_results=n_results,
+                include=['metadatas', 'distances'],
+                where=filters
+            )
+            
+            if not results["ids"] or len(results["ids"][0]) == 0:
+                logger.warning(f"No results found for query: {query}")
+                return []
+            
+            # Format search results
+            search_results = []
+            for id, metadata, distance in zip(
+                results['ids'][0],
+                results['metadatas'][0],
+                results['distances'][0]
+            ):
+                similarity = 1 - (distance / 2)  # Convert distance to similarity score
+                search_results.append({
+                    "id": id,
+                    "metadata": metadata,
+                    "similarity_score": round(similarity, 4)
+                })
+            
+            return sorted(
+                search_results,
+                key=lambda x: x['similarity_score'],
+                reverse=True
+            )
+        except Exception as e:
+            logger.error(f"Error searching items with filters: {str(e)}")
+            raise ChromaQueryError(f"Error performing filtered search: {str(e)}")
         
     @retry_on_error()
     async def add_document(

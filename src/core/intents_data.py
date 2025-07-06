@@ -28,6 +28,63 @@ intents_data = {
         "What are the features of the [product_name]?",
         "What are the specifications of the [product_name]?",
         "What are the key features of the [product_name]?",
+        "Can you give me more information about [product_name]?",
+        "What can you tell me about [product_name]?",
+        "I'd like to know more about [product_name]",
+        "What are the details of [product_name]?",
+        "Give me information about [product_name]",
+        "What's special about [product_name]?",
+        "What makes [product_name] unique?",
+        "What are the benefits of [product_name]?",
+        "What are the advantages of [product_name]?",
+        "How is [product_name] different from other products?",
+        "What's included with [product_name]?",
+        "Does [product_name] come with accessories?",
+        "What's in the box for [product_name]?"
+    ],
+    "product_dimensions": [
+        "What are the dimensions of [product_name]?",
+        "How big is the [product_name]?",
+        "What's the size of [product_name]?",
+        "How tall is the [product_name]?",
+        "How wide is the [product_name]?",
+        "What's the height of [product_name]?",
+        "What's the width of [product_name]?",
+        "What's the depth of [product_name]?",
+        "What's the length of [product_name]?",
+        "Is [product_name] available in different sizes?",
+        "What are the measurements of [product_name]?",
+        "How much space does [product_name] take up?",
+        "Will [product_name] fit in my space?",
+        "Is [product_name] suitable for a small room?",
+        "What are the assembled dimensions of [product_name]?"
+    ],
+    "product_material": [
+        "What material is [product_name] made of?",
+        "Is [product_name] made of [material]?",
+        "What's the upholstery of [product_name]?",
+        "What fabric is used for [product_name]?",
+        "Is [product_name] made of solid wood?",
+        "What type of wood is [product_name] made from?",
+        "Is [product_name] made of genuine leather?",
+        "What's the frame of [product_name] made of?",
+        "Is [product_name] made of natural materials?",
+        "Does [product_name] contain any synthetic materials?",
+        "What's the quality of the material used in [product_name]?",
+        "Is the material of [product_name] durable?",
+        "Is [product_name] made of eco-friendly materials?"
+    ],
+    "product_color": [
+        "What colors does [product_name] come in?",
+        "Is [product_name] available in [color]?",
+        "Do you have [product_name] in [color]?",
+        "What color options are available for [product_name]?",
+        "Can I get [product_name] in a different color?",
+        "What's the most popular color for [product_name]?",
+        "Does [product_name] come in neutral colors?",
+        "Are there any limited edition colors for [product_name]?",
+        "Can I see all color options for [product_name]?",
+        "Is the color of [product_name] exactly as shown in the picture?"
     ],
     "interior_design_advice": [
         "How should I arrange my living room?",
@@ -99,24 +156,11 @@ intents_data = {
         "Do you accept PayPal?",
         "Do you offer financing options?"
     ],
-    "technical_support": [
-        "I need help with my [product_type]",
-        "My [product_type] is not working",
-        "Can you help me troubleshoot my [product_type]?",
-        "I need assistance with my purchase"
-    ],
     "product_availability": [
         "Is this [product_type] in stock?",
         "Do you have [product_name] available?",
         "Is [product_type] currently available?",
         "Can I order this item now?"
-    ],
-    "checkout_help": [
-        "I need help with checkout",
-        "I'm having trouble checking out",
-        "How do I complete my purchase?",
-        "What are the next steps after adding items to my cart?",
-        "I'm not sure how to proceed with my order"
     ],
     "thank_you": [
         "Thank you",
