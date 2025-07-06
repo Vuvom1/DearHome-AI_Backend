@@ -14,6 +14,10 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 # Your secret key and algorithm settings
 SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+ISSUER = os.getenv("JWT_ISSUER", "http://localhost:5000/")
+AUDIENCE = os.getenv("JWT_AUDIENCE", "http://localhost:5000/")
+# Ensure SECRET_KEY is set
+
 ALGORITHM = "HS256"
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
@@ -25,7 +29,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     
     try:
         # Decode the received token
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, SECRET_KEY, issuer=ISSUER, audience=AUDIENCE, algorithms=[ALGORITHM])
         username: str = payload.get("unique_name")
         if username is None:
             raise credentials_exception
@@ -52,8 +56,8 @@ async def get_token_from_websocket(websocket: WebSocket) -> str:
 
 async def get_current_user_ws(websocket: WebSocket, token: str = Depends(get_token_from_websocket)):
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        print(f"Decoded payload: {SECRET_KEY}")  # Debugging line to check the payload
+        payload = jwt.decode(token, SECRET_KEY, issuer=ISSUER, audience=AUDIENCE, algorithms=[ALGORITHM])
+        print(f"Decoded payload: {payload}")  # Debugging line to check the payload
         user_id: str = payload.get("nameid")
         if user_id is None:
             await websocket.close(code=status.WS_1008_POLICY_VIOLATION, reason="Token is invalid or expired")
